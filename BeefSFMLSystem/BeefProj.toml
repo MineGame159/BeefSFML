@@ -1,0 +1,7 @@
+FileVersion = 1
+
+[Project]
+Name = "BeefSFMLSystem"
+TargetType = "BeefLib"
+StartupObject = "Program"
+DefaultNamespace = "SFML.System"

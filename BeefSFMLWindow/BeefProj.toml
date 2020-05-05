@@ -1,0 +1,8 @@
+FileVersion = 1
+Dependencies = {corlib = "*", BeefSFMLSystem = "*"}
+
+[Project]
+Name = "BeefSFMLWindow"
+TargetType = "BeefLib"
+StartupObject = "Program"
+DefaultNamespace = "SFML.Window"
