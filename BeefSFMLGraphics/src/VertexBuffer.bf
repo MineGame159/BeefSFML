@@ -3,7 +3,6 @@ using SFML.System;
 
 namespace SFML.Graphics
 {
-
 	public enum BufferUsageType
 	{
 		Stream,
@@ -11,7 +10,7 @@ namespace SFML.Graphics
 		Static
 	}
 
-	public class VertexBuffer : NativeHandle
+	public class VertexBuffer : SFHandle<VertexBufferHandle>, IDisposable
 	{
 		public this(uint32 vertexCount, PrimitiveType primitiveType, BufferUsageType usageType) : base(sfVertexBuffer_create(vertexCount, primitiveType, usageType)) {}
 		public ~this() { sfVertexBuffer_destroy(_handle); }
@@ -19,47 +18,45 @@ namespace SFML.Graphics
 		public void Swap(VertexBuffer with) => sfVertexBuffer_swap(_handle, with.[Friend]_handle);
 		public bool Update(Vertex[] vertices, uint32 offset) => sfVertexBuffer_update(_handle, vertices.CArray(), (uint32)vertices.Count, offset);
 
-		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfVertexBuffer_create(uint32 vertexCount, PrimitiveType type, BufferUsageType usageType);
+		public override void Dispose() {}
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfVertexBuffer_copy(void* bufferToCopy);
+		private static extern VertexBufferHandle sfVertexBuffer_create(uint32 vertexCount, PrimitiveType type, BufferUsageType usageType);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfVertexBuffer_destroy(void* handle);
+		private static extern VertexBufferHandle sfVertexBuffer_copy(VertexBufferHandle bufferToCopy);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern uint sfVertexBuffer_getVertexCount(void* handle);
+		private static extern void sfVertexBuffer_destroy(VertexBufferHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern bool sfVertexBuffer_update(void* handle, Vertex* vertices, uint32 vertexCount, uint32 offset);
+		private static extern uint sfVertexBuffer_getVertexCount(VertexBufferHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern bool sfVertexBuffer_updateFromVertexBuffer(void* target, void* source);
+		private static extern bool sfVertexBuffer_update(VertexBufferHandle handle, Vertex* vertices, uint32 vertexCount, uint32 offset);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfVertexBuffer_swap(void* target, void* source);
+		private static extern bool sfVertexBuffer_updateFromVertexBuffer(VertexBufferHandle target, VertexBufferHandle source);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern uint32 sfVertexBuffer_getNativeHandle(void* handle);
+		private static extern void sfVertexBuffer_swap(VertexBufferHandle target, VertexBufferHandle source);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfVertexBuffer_setPrimitiveType(void* handle, PrimitiveType primitiveType);
+		private static extern uint32 sfVertexBuffer_getNativeHandle(VertexBufferHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern PrimitiveType sfVertexBuffer_getPrimitiveType(void* handle);
+		private static extern void sfVertexBuffer_setPrimitiveType(VertexBufferHandle handle, PrimitiveType primitiveType);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfVertexBuffer_setUsage(void* handle, BufferUsageType usageType);
+		private static extern PrimitiveType sfVertexBuffer_getPrimitiveType(VertexBufferHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern BufferUsageType sfVertexBuffer_getUsage(void* handle);
+		private static extern void sfVertexBuffer_setUsage(VertexBufferHandle handle, BufferUsageType usageType);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern bool sfVertexBuffer_isAvailable();
+		private static extern BufferUsageType sfVertexBuffer_getUsage(VertexBufferHandle handle);
 
-		/*Move to RenderTexture*/
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfRenderTexture_drawVertexBuffer(void* handle, void* buffer, ref RenderStates states);
+		private static extern bool sfVertexBuffer_isAvailable();
 	}
 }

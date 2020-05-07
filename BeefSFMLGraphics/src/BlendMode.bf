@@ -2,59 +2,54 @@ using System;
 
 namespace SFML.Graphics
 {
-	public enum BlendFactor
+	public enum Factor : uint32
 	{
-		Zero,
-		One,
-		SourceColor,
-		OneMinusSourceColor,
-		DestinationColor,
-		OneMinusDestinationColor,
-		SourceAlpha,
-		OneMinusSourceAlpha,
-		DestinationAlpha,
-		OneMinusDestinationAlpha
+	    Zero,
+	    One,
+	    SrcColor,
+	    OneMinusSrcColor,
+	    DstColor,
+	    OneMinusDstColor,
+	    SrcAlpha,
+	    OneMinusSrcAlpha,
+	    DstAlpha,
+	    OneMinusDstAlpha
 	}
 
-	public enum BlendEquation
+	public enum Equation : uint32
 	{
-		Add,
-		Subtract,
-		ReverseSubtract
+	    Add,
+	    Subtract,
+	    ReverseSubtract
 	}
 
-	[CRepr]
-	struct BlendMode
+	[CRepr, Ordered]
+	public struct BlendMode
 	{
-		public BlendFactor ColorSourceFactor;
-		public BlendFactor ColorDestinationFactor;
-		public BlendEquation ColorEquation;
-		public BlendFactor AlphaSourceFactor;
-		public BlendFactor AlphaDestinationFactor;
-		public BlendEquation AlphaEquation;
+		public static readonly BlendMode Alpha = BlendMode(.SrcAlpha, .OneMinusSrcAlpha, .Add, .One, .OneMinusSrcAlpha, .Add);
+		public static readonly BlendMode Add = BlendMode(.SrcAlpha, .One, .Add, .One, .One, .Add);
+		public static readonly BlendMode Multiply = BlendMode(.DstColor, .Zero);
+		public static readonly BlendMode None = BlendMode(.One, .Zero);
 
-		public this(BlendFactor colSrcFactor, BlendFactor colDstFactor) : this(colSrcFactor, colDstFactor, BlendEquation.Add) {}
-		public this(BlendFactor colSrcFactor, BlendFactor colDstFactor, BlendEquation colBlendEquation)
-		: this(colSrcFactor, colDstFactor, colBlendEquation, colSrcFactor, colDstFactor, colBlendEquation) {}
+		public this(Factor SourceFactor, Factor DestinationFactor) : this(SourceFactor, DestinationFactor, Equation.Add) {}
 
-		public this(BlendFactor colSrcFactor,
-			BlendFactor colDstFactor,
-			BlendEquation colBlendEquation,
-			BlendFactor alphaSrcFactor,
-			BlendFactor alphaDstFactor,
-			BlendEquation alphaBlendEquation)
-			{
-				ColorSourceFactor = colSrcFactor;
-				ColorDestinationFactor = colDstFactor;
-				ColorEquation = colBlendEquation;
-				AlphaSourceFactor = alphaSrcFactor;
-				AlphaDestinationFactor = alphaDstFactor;
-				AlphaEquation = alphaBlendEquation;
-			}
+		public this(Factor SourceFactor, Factor DestinationFactor, Equation BlendEquation) : this(SourceFactor, DestinationFactor, BlendEquation, SourceFactor, DestinationFactor, BlendEquation) {}
 
-		public static readonly BlendMode Alpha = BlendMode(.SourceAlpha, .OneMinusSourceAlpha, .Add, .One, .OneMinusSourceAlpha, .Add);
-		public static readonly BlendMode Add = BlendMode(.SourceAlpha, .One, .Add, .One, .One, .Add);
-		public static readonly BlendMode Multiply = BlendMode(.DestinationColor, .Zero);
-		public static readonly BlendMode None =  BlendMode(.One, .Zero);
+		public this(Factor ColorSourceFactor, Factor ColorDestinationFactor, Equation ColorBlendEquation, Factor AlphaSourceFactor, Factor AlphaDestinationFactor, Equation AlphaBlendEquation)
+		{
+		    ColorSrcFactor = ColorSourceFactor;
+		    ColorDstFactor = ColorDestinationFactor;
+		    ColorEquation = ColorBlendEquation;
+		    AlphaSrcFactor = AlphaSourceFactor;
+		    AlphaDstFactor = AlphaDestinationFactor;
+		    AlphaEquation = AlphaBlendEquation;
+		}
+
+		public Factor ColorSrcFactor;
+		public Factor ColorDstFactor;
+		public Equation ColorEquation;
+		public Factor AlphaSrcFactor;
+		public Factor AlphaDstFactor;
+		public Equation AlphaEquation;
 	}
 }

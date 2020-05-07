@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace SFML.Graphics
 {
-	[CRepr]
+	[CRepr, Ordered]
 	public struct IntRect
 	{
 		public int Left;
@@ -60,7 +60,7 @@ namespace SFML.Graphics
 		public static implicit operator FloatRect(IntRect r) { return FloatRect(r.Left, r.Top, r.Width, r.Height); }
 	}
 
-	[CRepr]
+	[CRepr, Ordered]
 	public struct FloatRect
 	{
 		public float Left;

@@ -4,20 +4,20 @@ using SFML.Window;
 
 namespace SFML.Graphics
 {
-	public class View : NativeHandle
+	public class View : SFHandle<ViewHandle>
 	{
-		private readonly bool _default = false;
+		protected bool _isDefaultView;
 
 		public this() : base(sfView_create()) { }
-		private this(void* handle, bool isDefault) : base(handle) { _default = isDefault; }
+		private this(ViewHandle handle, bool defaultView) : base(handle) { _isDefaultView = defaultView; }
+		public ~this()
+		{
+			if (!_isDefaultView)
+				sfView_destroy(_handle);
+		}
 
 		public override void Dispose()
 		{
-
-			Console.WriteLine("Disposing some crap");
-			if (!_default)
-				sfView_destroy(_handle);
-
 			base.Dispose();
 		}
 
@@ -50,51 +50,51 @@ namespace SFML.Graphics
 		public void Zoom(float factor) => sfView_zoom(_handle, factor);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		private static extern void* sfView_create();
+		private static extern ViewHandle sfView_create();
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfView_createFromRect(FloatRect vect);
+		static extern ViewHandle sfView_createFromRect(FloatRect vect);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfView_copy(void* handle);
+		static extern ViewHandle sfView_copy(ViewHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_destroy(void* handle);
+		static extern void sfView_destroy(ViewHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_setCenter(void* handle, Vector2f center);
+		static extern void sfView_setCenter(ViewHandle handle, Vector2f center);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_setSize(void* handle, Vector2f size);
+		static extern void sfView_setSize(ViewHandle handle, Vector2f size);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_setRotation(void* handle, float angle);
+		static extern void sfView_setRotation(ViewHandle handle, float angle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_setViewport(void* handle, FloatRect viewport);
+		static extern void sfView_setViewport(ViewHandle handle, FloatRect viewport);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_reset(void* handle, FloatRect rectangle);
+		static extern void sfView_reset(ViewHandle handle, FloatRect rectangle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern Vector2f sfView_getCenter(void* handle);
+		static extern Vector2f sfView_getCenter(ViewHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern Vector2f sfView_getSize(void* handle);
+		static extern Vector2f sfView_getSize(ViewHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern float sfView_getRotation(void* handle);
+		static extern float sfView_getRotation(ViewHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern FloatRect sfView_getViewport(void* handle);
+		static extern FloatRect sfView_getViewport(ViewHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_move(void* handle, Vector2f offset);
+		static extern void sfView_move(ViewHandle handle, Vector2f offset);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_rotate(void* handle, float angle);
+		static extern void sfView_rotate(ViewHandle handle, float angle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfView_zoom(void* handle, float factor);
+		static extern void sfView_zoom(ViewHandle handle, float factor);
 	}
 }

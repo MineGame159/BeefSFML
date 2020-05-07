@@ -1,16 +1,26 @@
 using System;
 using SFML.System;
+using System.IO;
 
 namespace SFML.Graphics
 {
-	public class Texture : NativeHandle
+	public class Texture : SFHandle<TextureHandle>
 	{
 		private uint32 _width;
 		private uint32 _height;
+		private String _filename = new String() ~ delete _;
 
-		public this(uint32 width, uint32 height) : base(sfTexture_create(width, height)) {}
-		public this(char8* filename) : base(sfTexture_createFromFile(filename, ref IntRect(0, 0, 0, 0))) {}
-		public this(char8* filename, ref IntRect rect) : base(sfTexture_createFromFile(filename, ref rect)) {}
+		public String Filename => _filename;
+
+		public bool Repeated => sfTexture_isRepeated(_handle);
+		public bool IsSRGB => sfTexture_isSrgb(_handle);
+		public bool IsSmooth => sfTexture_isSmooth(_handle);
+
+		public Vector2u32 Size => sfTexture_getSize(_handle); 
+
+		public this(uint32 width, uint32 height) {sfTexture_create(width, height);}
+		public this(String filename) { _handle = sfTexture_createFromFile(ToRelativePath(filename), ref IntRect(0, 0, 0, 0));}
+		public this(String filename, ref IntRect rect) { _handle = sfTexture_createFromFile(ToRelativePath(filename), ref rect); }
 
 		public void Update(uint8[] pixels)
 		{
@@ -18,82 +28,102 @@ namespace SFML.Graphics
 			sfTexture_updateFromPixels(_handle, pixels.CArray(), size.X, size.Y, 0, 0);
 		}
 
+		public static uint MaxSize => sfTexture_getMaximumSize();
+		public static void Bind(Texture texture) => sfTexture_bind(texture.[Friend]_handle);
+
+		private String ToRelativePath(String filename)
+		{
+			let path = scope String();
+
+			Environment.GetExecutableFilePath(path);
+			Path.GetDirectoryPath(path, _filename);
+
+			#if BF_PLATFORM_WINDOWS 
+			_filename.AppendF("\\{}", filename);
+			#else
+			_filename.AppendF("/{}", filename);				   
+			#endif
+			
+
+			return _filename;
+		}
+		
 		public Vector2u32 GetSize() => sfTexture_getSize(_handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfTexture_create(uint32 width, uint32 height);
+		static extern TextureHandle sfTexture_create(uint32 width, uint32 height);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfTexture_createFromFile(char8* filename, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromFile(char8* filename, ref IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfTexture_createFromStream(void* stream, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromStream(TextureHandle stream, ref IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfTexture_createFromImage(void* image, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromImage(TextureHandle image, ref IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfTexture_createFromMemory(void* data, uint64 size, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromMemory(TextureHandle data, uint64 size, ref IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfTexture_copy(void* texture);
+		static extern TextureHandle sfTexture_copy(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_destroy(void* texture);
+		static extern void sfTexture_destroy(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern Vector2u32 sfTexture_getSize(void* texture);
+		static extern Vector2u32 sfTexture_getSize(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void* sfTexture_copyToImage(void* texture);
+		static extern TextureHandle sfTexture_copyToImage(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_updateFromPixels(void* handle, uint8* pixels, uint32 width, uint32 height, uint32 x, uint32 y);
+		static extern void sfTexture_updateFromPixels(TextureHandle handle, uint8* pixels, uint32 width, uint32 height, uint32 x, uint32 y);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_updateFromTexture(void* handle, void* texture, uint32 x, uint32 y);
+		static extern void sfTexture_updateFromTexture(TextureHandle handle, TextureHandle texture, uint32 x, uint32 y);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_updateFromImage(void* texture, void* image, uint32 x, uint32 y);
+		static extern void sfTexture_updateFromImage(TextureHandle handle, TextureHandle image, uint32 x, uint32 y);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_updateFromWindow(void* texture, void* window, uint32 x, uint32 y);
+		static extern void sfTexture_updateFromWindow(TextureHandle handle, TextureHandle window, uint32 x, uint32 y);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_updateFromRenderWindow(void* texture, void* renderWindow, uint32 x, uint32 y);
+		static extern void sfTexture_updateFromRenderWindow(TextureHandle handle, WindowHandle windowHandle, uint32 x, uint32 y);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_bind(void* texture);
+		static extern void sfTexture_bind(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_setSmooth(void* texture, bool smooth);
+		static extern void sfTexture_setSmooth(TextureHandle handle, bool smooth);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern bool sfTexture_isSmooth(void* texture);
+		static extern bool sfTexture_isSmooth(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_setSrgb(void* texture, bool sRGB);
+		static extern void sfTexture_setSrgb(TextureHandle handle, bool sRGB);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern bool sfTexture_isSrgb(void* texture);
+		static extern bool sfTexture_isSrgb(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_setRepeated(void* texture, bool repeated);
+		static extern void sfTexture_setRepeated(TextureHandle handle, bool repeated);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern bool sfTexture_isRepeated(void* texture);
+		static extern bool sfTexture_isRepeated(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern bool sfTexture_generateMipmap(void* texture);
+		static extern bool sfTexture_generateMipmap(TextureHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern void sfTexture_swap(void* handle, void* right);
+		static extern void sfTexture_swap(TextureHandle handle, TextureHandle right);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern uint32 sfTexture_getNativeHandle(void* shader);
+		static extern uint32 sfTexture_getNativeHandle(ShaderHandle shader);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern FloatRect sfTexture_getTexCoords(void* texture, IntRect rectangle);
+		static extern FloatRect sfTexture_getTexCoords(TextureHandle handle, IntRect rectangle);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		static extern uint32 sfTexture_getMaximumSize();

@@ -15,23 +15,33 @@ namespace SFML.System
 			}
 		}
 
-		public Vector2f Zero => Vector2f(0f, 0f);
+		public static Vector2f Zero => Vector2f(0f, 0f);
+		public static Vector2f Right => Vector2f(1f, 0f);
+		public static Vector2f Up => Vector2f(0f, 1f);
 		public static explicit operator Vector2f(Vector2i v)  { return Vector2f(v.X, v.Y); }
+
+		public static Vector2f operator +(Vector2f lhs, float scalar) { return Vector2f(lhs.X + scalar, lhs.Y + scalar); }
+		public static Vector2f operator -(Vector2f lhs, float scalar) { return Vector2f(lhs.X - scalar, lhs.Y - scalar); }
+		public static Vector2f operator -(Vector2f rhs) { return Vector2f(-rhs.X, -rhs.Y); }
+
+		public static Vector2f operator *(Vector2f lhs, float scalar) { return Vector2f(lhs.X * scalar, lhs.Y * scalar); }
 	}
 
 	extension Vector2i {
-		public int SquareMagnitude => (X * X) + (Y * Y);
-		public int Magnitude => (int)Math.Sqrt(SquareMagnitude);
+		public int32 SquareMagnitude => (X * X) + (Y * Y);
+		public int32 Magnitude => (int32)Math.Sqrt(SquareMagnitude);
 
 		public Vector2i Normalized
 		{
 			get {
 				float inverseNormal = 1f / Math.Sqrt(SquareMagnitude);
-				return Vector2i((int)(X * inverseNormal), (int)(Y * inverseNormal));
+				return Vector2i((int32)(X * inverseNormal), (int32)(Y * inverseNormal));
 			}
 		}
 
-		public Vector2i Zero => Vector2i(0, 0);
+		public static Vector2i Zero => Vector2i(0, 0);
+		public static Vector2f Right => Vector2f(1f, 0f);
+		public static Vector2f Up => Vector2f(0f, 1f);
 	}
 
 	extension Vector2u32 {
@@ -46,7 +56,9 @@ namespace SFML.System
 			}
 		}
 
-		public Vector2i Zero => Vector2i(0, 0);
+		public static Vector2i Zero => Vector2i(0, 0);
+		public static Vector2i Right => Vector2i(1, 0);
+		public static Vector2i Up => Vector2i(0, 1);
 	}
 
 	[CRepr]
@@ -63,15 +75,20 @@ namespace SFML.System
 
 		public static Vector2f operator+(Vector2f lhs, Vector2f rhs) { return Vector2f(lhs.X + rhs.X, lhs.Y + rhs.Y); }
 		public static Vector2f operator-(Vector2f lhs, Vector2f rhs) { return Vector2f((lhs.X - rhs.X), (lhs.Y - rhs.Y)); }
+
+		public override void ToString(System.String strBuffer)
+		{
+			strBuffer.AppendF("[{}, {}]", X, Y);
+		}
 	}
 
 	[CRepr]
 	public struct Vector2i : IEquatable<Vector2i>, IHashable
 	{
-		public int X;
-		public int Y;
+		public int32 X;
+		public int32 Y;
 
-		public this(int x, int y)
+		public this(int32 x, int32 y)
 		{
 			X = x;
 			Y = y;
@@ -106,6 +123,8 @@ namespace SFML.System
 
 		public static Vector2u32 operator+(Vector2u32 lhs, Vector2u32 rhs) { return Vector2u32(lhs.X + rhs.X, lhs.Y + rhs.Y); }
 		public static Vector2u32 operator-(Vector2u32 lhs, Vector2u32 rhs) { return Vector2u32((uint32)(lhs.X - rhs.X), (uint32)(lhs.Y - rhs.Y)); }
+
+		public static explicit operator Vector2f(Vector2u32 v) { return Vector2f((float)v.X, (float)v.Y); }
 
 		public override void ToString(System.String strBuffer)
 		{

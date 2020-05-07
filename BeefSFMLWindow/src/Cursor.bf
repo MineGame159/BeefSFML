@@ -22,7 +22,7 @@ namespace SFML.Window
 	}
 
 
-	public class Cursor : NativeHandle
+	public class Cursor : SFHandle<CursorHandle>, IDisposable
 	{
 		public this(CursorType type) : base(sfCursor_createFromSystem(type)) {}
 		public this(uint8* pixels, Vector2u32 size, Vector2u32 hotspot) : base(sfCursor_createFromPixels(pixels, size, hotspot)) {}
@@ -30,18 +30,15 @@ namespace SFML.Window
 			sfCursor_destroy(_handle);
 		}
 
-		public override void Dispose()
-		{
-			base.Dispose();
-		}
+		public override void Dispose() { base.Dispose(); }
 
 		[Import(CSFML_WINDOW), CLink]
-		private static extern void* sfCursor_createFromSystem(CursorType type);
+		private static extern CursorHandle sfCursor_createFromSystem(CursorType type);
 
 		[Import(CSFML_WINDOW), CLink]
-		private static extern void* sfCursor_createFromPixels(uint8* pixels, Vector2u32 size, Vector2u32 hotspot);
+		private static extern CursorHandle sfCursor_createFromPixels(uint8* pixels, Vector2u32 size, Vector2u32 hotspot);
 
 		[Import(CSFML_WINDOW), CLink]
-		private static extern void sfCursor_destroy(void* handle);
+		private static extern void sfCursor_destroy(CursorHandle handle);
 	}
 }
