@@ -4,13 +4,23 @@ namespace SFML.Graphics
 {
 	public interface IRenderTarget
 	{
-		Vector2u32 Size { get; }
+		View DefaultView { get; }
+		View CurrentView { get; set; };
 
-		void SetView(View toView);
+		void DrawVertexBuffer(VertexBuffer buffer, RenderStates states);
+		void DrawVertexArray(VertexArray array, RenderStates states);
+		void DrawPrimitive(PrimitiveType type, Vertex[] vertices, RenderStates states);
+		void DrawSprite(Sprite sprite, RenderStates states);
+		void DrawShape(Shape shape, RenderStates states);
+		void DrawText(Text text, RenderStates states);
 
-		IntRect GetViewport(View fromView);
+		bool RestoreGLStates();
+		void ResetGLStates();
+		void PushGLStates(); 
+		void PopGLStates();
 
-		Vector2f FromScreenToWorld(Vector2i coords, View referenceView);
-		Vector2i FromWorldToScreen(Vector2f coords, View referenceView);
+		void Clear(Color color);
+
+		IntRect CurrentViewport { get; } 
 	}
 }

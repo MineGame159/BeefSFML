@@ -15,13 +15,19 @@ namespace SFML.Graphics
 		Quads,
 	}
 
-	public class RenderWindow : Window
+	public class RenderWindow : Window, IRenderTarget
 	{
-		private View _view = null;
 		private View _defaultView = null;
+		private View _view = null;
 
-		public View CurrentView => _view;
 		public View DefaultView => _defaultView;
+		public View CurrentView {
+			get { return _view; }
+			set {
+				sfRenderWindow_setView(_handle, value.[Friend]_handle);
+				_view = value;
+			}
+		}
 
 		public this(VideoMode mode, uint8[] utf32Title) : this(mode, utf32Title, Styles.Default, ref ContextSettings(0, 0)) {}
 		public this(VideoMode mode, uint8[] utf32Title, Styles styles) : this(mode, utf32Title, styles, ref ContextSettings(0, 0)) {}
@@ -30,42 +36,48 @@ namespace SFML.Graphics
 		public this(VideoMode mode, String title) : this(mode, title, Styles.Default, ref ContextSettings(0, 0)) {}
 		public this(VideoMode mode, String title, Styles styles) : this(mode, title, styles, ref ContextSettings(0, 0)) {}
 		public this(VideoMode mode, String title, Styles styles, ref ContextSettings settings) : base (sfRenderWindow_create(mode, title, styles, ref settings)) { Init(); }
-
 		public ~this() { delete _defaultView; }
 
 		protected override void Destroy() { sfRenderWindow_destroy(_handle); }
-
 		protected override bool PollEvent(out WindowEvent event) { return sfRenderWindow_pollEvent(_handle, out event); }
+
 		public override bool IsOpen()  { return sfRenderWindow_isOpen(_handle); }
 		public override void Close() { sfRenderWindow_close(_handle); }
 		public override void Display() { sfRenderWindow_display(_handle); } 
 		public override void SetMouseCursor(Cursor cursor)  { sfRenderWindow_setMouseCursor(_handle, cursor.[Friend]_handle); }
 
-		public void ResetGLStates() {sfRenderWindow_resetGLStates(_handle);}
-		public void PushGLStates() {sfRenderWindow_pushGLStates(_handle);} 
-		public void PopGLStates() {sfRenderWindow_popGLStates(_handle);}
-		public bool RestoreGLStates() { return sfRenderWindow_restoreGLStates(_handle); }
-		public void ClearColor(Color color) { sfRenderWindow_clear(_handle, color); }
+		public bool RestoreGLStates() => sfRenderWindow_restoreGLStates(_handle);
+		public void ResetGLStates() => sfRenderWindow_resetGLStates(_handle);
+		public void PushGLStates() => sfRenderWindow_pushGLStates(_handle); 
+		public void PopGLStates() => sfRenderWindow_popGLStates(_handle);
+
+		public void Clear(Color color) { sfRenderWindow_clear(_handle, color); }
  		public void SetVSync(bool enabled) { sfRenderWindow_setVerticalSyncEnabled(_handle, enabled); }
 		public void SetFrameLimit(uint32 limit) { sfRenderWindow_setFramerateLimit(_handle, limit); }
 
-		public Vector2i GetRelativeMousePosition() { return sfMouse_getPositionRenderWindow(_handle); }
+		public void DrawVertexBuffer(VertexBuffer buffer, RenderStates states) { sfRenderWindow_drawVertexBuffer(_handle, buffer.[Friend]_handle, states); }
+		public void DrawVertexArray(VertexArray array, RenderStates states) { sfRenderWindow_drawVertexArray(_handle, array.[Friend]_handle, states); }
+		public void DrawPrimitive(PrimitiveType type, Vertex[] vertices, RenderStates states) { sfRenderWindow_drawPrimitives(_handle, vertices.CArray(), (uint32)vertices.Count, type, states); }
+		public void DrawSprite(Sprite sprite, RenderStates states) { sfRenderWindow_drawSprite(_handle, sprite.[Friend]_handle, states); }
+		public void DrawShape(Shape shape, RenderStates states) { sfRenderWindow_drawShape(_handle, shape.[Friend]_handle, states); }
+		public void DrawText(Text text, RenderStates states) { sfRenderWindow_drawText(_handle, text.[Friend]_handle, states); }
 
-		public void DrawVertexBuffer(VertexBuffer buffer, ref RenderStates states) { sfRenderWindow_drawVertexBuffer(_handle, buffer.[Friend]_handle, ref states); }
-		public void DrawPrimitive(PrimitiveType type, Vertex[] vertices, ref RenderStates states) { sfRenderWindow_drawPrimitives(_handle, vertices.CArray(), (uint32)vertices.Count, type, ref states); }
-		public void DrawSprite(Sprite sprite, ref RenderStates states)
+		public Vector2i GetRelativeMousePosition() => sfMouse_getPositionRenderWindow(_handle);
+		public void SetRelativeMousePosition(Vector2i position) => sfMouse_setPositionRenderWindow(position, _handle);
+
+		public Vector2f FromScreenToWorld(Vector2i coords, View referenceView = null)
 		{
-			states.Matrix *= sprite.Transform.GetMatrix();
-			sfRenderWindow_drawSprite(_handle, sprite.[Friend]_handle, states);
+			 var viewHandle = referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle;
+			 return sfRenderWindow_mapPixelToCoords(_handle, coords, viewHandle);
+		} 
+		public Vector2i FromWorldToScreen(Vector2f coords, View referenceView = null)
+		{
+			let viewHandle = referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle;
+			return sfRenderWindow_mapCoordsToPixel(_handle, coords, viewHandle);
 		}
 
-		public Vector2f FromScreenToWorld(Vector2i coords, View referenceView = null) { return sfRenderWindow_mapPixelToCoords(_handle, coords, referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle); } 
-		public Vector2i FromWorldToScreen(Vector2f coords, View referenceView = null) { return sfRenderWindow_mapCoordsToPixel(_handle, coords, referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle); }
-
 		public Vector2u32 Size { get { return sfRenderWindow_getSize(_handle); } };
-
-		public void SetView(View toView) { _view = toView; }
-		public IntRect GetViewport(View fromView) { return sfRenderWindow_getViewport(_handle, fromView.[Friend]_handle); }
+		public IntRect CurrentViewport => sfRenderWindow_getViewport(_handle, _view == null ? _defaultView.[Friend]_handle : _view.[Friend]_handle);
 
 		public override void Dispose()
 		{
@@ -75,17 +87,25 @@ namespace SFML.Graphics
 			base.Dispose();
 		}
 
-		protected override void Init()
-		{
-			_defaultView = new [Friend]View(sfRenderWindow_getDefaultView(_handle), true);
+		private void Init() {
+			_defaultView = new [Friend].(sfRenderWindow_getDefaultView(_handle), true);
 			_view = _defaultView;
 		}
+
+		[Import(CSFML_GRAPHICS), CLink]
+		static extern void sfRenderWindow_drawText(WindowHandle handle, TextHandle text, RenderStates states);
+
+		[Import(CSFML_GRAPHICS), CLink]
+		static extern void sfRenderWindow_drawShape(WindowHandle handle, ShapeHandle shape, RenderStates states);
+
+		[Import(CSFML_GRAPHICS), CLink]
+		static extern void sfRenderWindow_drawVertexArray(WindowHandle handle, VertexArrayHandle vertices, RenderStates states);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		static extern void sfRenderWindow_drawSprite(WindowHandle handle, SpriteHandle sprite, RenderStates states);
 		
 		[Import(CSFML_GRAPHICS), CLink]
-		private static extern void sfRenderWindow_drawVertexBuffer(WindowHandle handle, VertexBufferHandle buffer, ref RenderStates states);
+		private static extern void sfRenderWindow_drawVertexBuffer(WindowHandle handle, VertexBufferHandle buffer, RenderStates states);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		private static extern WindowHandle sfRenderWindow_create(VideoMode mode, char8* title, Styles style, ref ContextSettings settings);
@@ -178,7 +198,7 @@ namespace SFML.Graphics
 		private static extern void sfRenderWindow_clear(WindowHandle handle, Color color);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		private static extern void sfRenderWindow_setView(WindowHandle handle, void* view);
+		private static extern void sfRenderWindow_setView(WindowHandle handle, ViewHandle view);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		private static extern WindowHandle sfRenderWindow_getView(void* view);
@@ -196,7 +216,7 @@ namespace SFML.Graphics
 		private static extern Vector2i sfRenderWindow_mapCoordsToPixel(WindowHandle handle, Vector2f point, ViewHandle view);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		private static extern void sfRenderWindow_drawPrimitives(WindowHandle handle, Vertex* vertices, uint32 vertexCount, PrimitiveType type, ref RenderStates renderStates);
+		private static extern void sfRenderWindow_drawPrimitives(WindowHandle handle, Vertex* vertices, uint32 vertexCount, PrimitiveType type, RenderStates renderStates);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		private static extern void sfRenderWindow_pushGLStates(WindowHandle handle);

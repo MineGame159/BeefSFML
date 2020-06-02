@@ -4,13 +4,10 @@ using System.IO;
 
 namespace SFML.Graphics
 {
-	public class Texture : SFHandle<TextureHandle>
+	public class Texture : SFHandle<TextureHandle>, IDisposable
 	{
 		private uint32 _width;
 		private uint32 _height;
-		private String _filename = new String() ~ delete _;
-
-		public String Filename => _filename;
 
 		public bool Repeated => sfTexture_isRepeated(_handle);
 		public bool IsSRGB => sfTexture_isSrgb(_handle);
@@ -18,52 +15,68 @@ namespace SFML.Graphics
 
 		public Vector2u32 Size => sfTexture_getSize(_handle); 
 
-		public this(uint32 width, uint32 height) {sfTexture_create(width, height);}
-		public this(String filename) { _handle = sfTexture_createFromFile(ToRelativePath(filename), ref IntRect(0, 0, 0, 0));}
-		public this(String filename, ref IntRect rect) { _handle = sfTexture_createFromFile(ToRelativePath(filename), ref rect); }
+		public this(uint32 width, uint32 height) { sfTexture_create(width, height); }
+		public this(StringView filename) : base(0)
+		{
+			let copy = scope String(filename);
+			FileUtility.ToRelativePath(copy);
+			_handle = sfTexture_createFromFile(copy, IntRect(0, 0, 0, 0));
+		}
+
+		public this(StringView filename, IntRect rect) : base(0)
+		{
+			let copy = scope String(filename);
+			FileUtility.ToRelativePath(copy);
+			_handle = sfTexture_createFromFile(copy, rect);
+		}
+
+		public this(Stream stream) : base(0)
+		{
+			let adapter = scope SFStreamAdapter(stream);
+			_handle = sfTexture_createFromStream(adapter.GetCompatibleStream(), IntRect(0, 0, 0, 0));
+		}
+
+		public this(Stream stream, IntRect area) : base(0)
+		{
+			let adapter = scope SFStreamAdapter(stream);
+			_handle = sfTexture_createFromStream(adapter.GetCompatibleStream(), area);
+		}
+
+		public this(uint8[] bytes) : base(0)
+		{
+			_handle = sfTexture_createFromMemory(bytes.CArray(), (uint64)bytes.Count, IntRect(0, 0, 0, 0));
+		}
+
+		public this(uint8[] bytes, IntRect rect) : base(0)
+		{
+			_handle = sfTexture_createFromMemory(bytes.CArray(), (uint64)bytes.Count, rect);
+		}
+
+		private this(TextureHandle fromHandle) : base(fromHandle) { };
 
 		public void Update(uint8[] pixels)
 		{
-			Vector2u32 size = GetSize();
+			Vector2u32 size = Size;
 			sfTexture_updateFromPixels(_handle, pixels.CArray(), size.X, size.Y, 0, 0);
 		}
 
-		public static uint MaxSize => sfTexture_getMaximumSize();
-		public static void Bind(Texture texture) => sfTexture_bind(texture.[Friend]_handle);
-
-		private String ToRelativePath(String filename)
-		{
-			let path = scope String();
-
-			Environment.GetExecutableFilePath(path);
-			Path.GetDirectoryPath(path, _filename);
-
-			#if BF_PLATFORM_WINDOWS 
-			_filename.AppendF("\\{}", filename);
-			#else
-			_filename.AppendF("/{}", filename);				   
-			#endif
-			
-
-			return _filename;
-		}
-		
-		public Vector2u32 GetSize() => sfTexture_getSize(_handle);
+		public static uint32 MaximumSize => sfTexture_getMaximumSize();
+		public static void Bind(Texture texture) => sfTexture_bind(texture._handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		static extern TextureHandle sfTexture_create(uint32 width, uint32 height);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern TextureHandle sfTexture_createFromFile(char8* filename, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromFile(char8* filename,  IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern TextureHandle sfTexture_createFromStream(TextureHandle stream, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromStream(InputStream stream, IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern TextureHandle sfTexture_createFromImage(TextureHandle image, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromImage(TextureHandle image, IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		static extern TextureHandle sfTexture_createFromMemory(TextureHandle data, uint64 size, ref IntRect area);
+		static extern TextureHandle sfTexture_createFromMemory(void* data, uint64 size, IntRect area);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		static extern TextureHandle sfTexture_copy(TextureHandle handle);

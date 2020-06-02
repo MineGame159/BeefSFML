@@ -15,14 +15,14 @@ namespace SFML.Graphics
 			A = alpha;
 		}
 
-		public static readonly Color Red => Color(255, 0, 0, 255);
- 		public static readonly Color Blue => Color(0, 0, 255, 255);
-		public static readonly Color Green => Color(0, 255, 0, 255);
-		public static readonly Color CornflowerBlue => Color(100, 149, 237, 255);
-		public static readonly Color NotQuiteYellow => Color(255, 234, 4, 255);
-		public static readonly Color White => Color(255, 255, 255, 255);
-		public static readonly Color Black => Color(0, 0, 0, 255);
-		public static readonly Color Clear => Color(0, 0 ,0, 0);
-		public static readonly Color Gray => Color(127, 127, 127, 255);
+		public static readonly Color Red 			=> .(255, 0, 0, 255);
+		public static readonly Color Blue 			=> .(0, 0, 255, 255);
+		public static readonly Color Gray 			=> .(127, 127, 127, 255);
+		public static readonly Color Green 			=> .(0, 255, 0, 255);
+		public static readonly Color White 			=> .(255, 255, 255, 255);
+		public static readonly Color Black 			=> .(0, 0, 0, 255);
+		public static readonly Color Clear 			=> .(0, 0 ,0, 0);
+		public static readonly Color CornflowerBlue => .(100, 149, 237, 255);
+		public static readonly Color PleasantYellow => .(255, 234, 4, 255);
 	}
 }

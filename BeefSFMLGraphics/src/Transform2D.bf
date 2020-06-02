@@ -3,14 +3,16 @@ using SFML.System;
 
 namespace SFML.Graphics
 {
+	//sf::Transformable
 	class Transform2D
 	{
 		private Matrix3x3 _matrix;
-		private Matrix3x3 _inverseMatrix;
 
 		private Vector2f _position;
 		private Vector2f _scale;
+		private Vector2f _origin;
 		private float _rotation;
+
 
 		private bool _matrixIsDirty = true;
 
@@ -18,6 +20,7 @@ namespace SFML.Graphics
 			_matrix = Matrix3x3.Identity;
 			_position = Vector2f.Zero;
 			_scale = Vector2f(1, 1);
+			_origin = Vector2f.Zero;
 			_rotation = 0;
 		}
 
@@ -48,10 +51,21 @@ namespace SFML.Graphics
 			}
 		}
 
+		public Vector2f Origin
+		{
+			get { return _origin; }
+			set {
+				_origin = value;
+				_matrixIsDirty = true;
+			}
+		}
+
 		public Matrix3x3 GetMatrix()
 		{
+
 			if (_matrixIsDirty) {
 				_matrixIsDirty = false;
+
 				float angle = -_rotation * Math.PI_f / 180.0f;
 				float cosine = Math.Cos(angle);
 				float sine = Math.Sin(angle);
@@ -62,8 +76,8 @@ namespace SFML.Graphics
 				float scaleSinX = _scale.X * sine;
 				float scaleSinY = _scale.Y * sine;
 
-				float tx = -Vector2f.Zero.X * scaleCosX - Vector2f.Zero.Y * scaleSinY + _position.X;
-				float ty = Vector2f.Zero.X * scaleSinX - Vector2f.Zero.Y * scaleCosY + _position.Y;
+				float tx = -(_origin.X) * scaleCosX - -(_origin.Y) * scaleSinY + _position.X;
+				float ty = _origin.X * scaleSinX - _origin.Y * scaleCosY + _position.Y;
 
 				_matrix = Matrix3x3(scaleCosX, scaleSinY, tx,
 								   -scaleSinX, scaleCosY, ty,
@@ -71,6 +85,7 @@ namespace SFML.Graphics
 			}
 
 			return _matrix;
+			
 		}
 	}
 }

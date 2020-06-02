@@ -13,12 +13,14 @@ namespace SFML.Graphics
 	public class VertexBuffer : SFHandle<VertexBufferHandle>, IDisposable
 	{
 		public this(uint32 vertexCount, PrimitiveType primitiveType, BufferUsageType usageType) : base(sfVertexBuffer_create(vertexCount, primitiveType, usageType)) {}
+		public this(VertexBuffer from) : base(sfVertexBuffer_copy(from.[Friend]_handle)) {}
 		public ~this() { sfVertexBuffer_destroy(_handle); }
 
 		public void Swap(VertexBuffer with) => sfVertexBuffer_swap(_handle, with.[Friend]_handle);
 		public bool Update(Vertex[] vertices, uint32 offset) => sfVertexBuffer_update(_handle, vertices.CArray(), (uint32)vertices.Count, offset);
 
-		public override void Dispose() {}
+		public uint32 VertexCount => sfVertexBuffer_getVertexCount(_handle);
+
 
 		[Import(CSFML_GRAPHICS), CLink]
 		private static extern VertexBufferHandle sfVertexBuffer_create(uint32 vertexCount, PrimitiveType type, BufferUsageType usageType);
@@ -30,7 +32,7 @@ namespace SFML.Graphics
 		private static extern void sfVertexBuffer_destroy(VertexBufferHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
-		private static extern uint sfVertexBuffer_getVertexCount(VertexBufferHandle handle);
+		private static extern uint32 sfVertexBuffer_getVertexCount(VertexBufferHandle handle);
 
 		[Import(CSFML_GRAPHICS), CLink]
 		private static extern bool sfVertexBuffer_update(VertexBufferHandle handle, Vertex* vertices, uint32 vertexCount, uint32 offset);

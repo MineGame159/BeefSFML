@@ -30,36 +30,6 @@ namespace SFML.Window
 		SensorChanged
 	}
 
-	/*
-	public enum WindowEventUnion 
-	{
-	    case Closed;
-	    case Resized(SizeEventData);
-	    case LostFocus;
-	    case GainedFocus;
-	    case TextEntered(TextEventData);
-	    case KeyPressed(KeyEventData);
-	    case KeyReleased(KeyEventData);
-		case MouseWheelMoved(MouseWheelEventData);
-	    case MouseWheelScrolled(MouseWheelScrollEventData);
-	    case MouseButtonPressed(MouseButtonEventData);
-	    case MouseButtonReleased( MouseButtonEventData);
-	    case MouseMoved(MouseMoveEventData);
-	    case MouseEntered;
-	    case MouseLeft;
-	    case JoystickButtonPressed(JoystickButtonEventData);
-	    case JoystickButtonReleased(JoystickButtonEventData);
-	    case JoystickMoved(JoystickMoveEventData);
-	    case JoystickConnected(JoystickConnectEventData);
-	    case JoystickDisconnected(JoystickConnectEventData);
-	    case TouchBegan(TouchEventData);
-	    case TouchMoved(TouchEventData);
-	    case TouchEnded(TouchEventData);
-	    case SensorChanged(SensorEventData);
-	}
-	*/
-
-	/*C-like discriminated union because i couldn't get the above variant to play nice with csfml*/
 	[CRepr, Union]
 	public struct WindowEvent
 	{

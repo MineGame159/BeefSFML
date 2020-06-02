@@ -6,8 +6,6 @@ namespace SFML.Window
 	[CRepr]
 	public struct VideoMode
 	{
-		private static VideoMode[] _modes;
-
 		public this(uint32 width, uint32 height) : this(width, height, 32) { }
 		public this(uint32 width, uint32 height, uint32 bitsPerPixel)
 		{
@@ -18,21 +16,18 @@ namespace SFML.Window
 
 		public bool IsValid => sfVideoMode_isValid(this);
 
-		public static VideoMode[] GetFullscreenModes(bool flushOld = false)
+		public static VideoMode[] GetFullscreenModes()
 		{
-			if (!flushOld && _modes.Count > 0) return _modes;
-			delete _modes;
-
 			uint32 count;
-			VideoMode* modes = sfVideoMode_getFullscreenModes(out count);
+			VideoMode* modesPtr = sfVideoMode_getFullscreenModes(out count);
 
-			_modes = new VideoMode[count];
+			let modes = new VideoMode[count];
 
 			for (uint32 i = 0; i < count; i++) {
-				_modes[i] = modes[i];
+				modes[i] = modesPtr[i];
 			}
 			
-			return _modes;
+			return modes;
 		}
 
 		public static VideoMode DesktopMode => sfVideoMode_getDesktopMode();

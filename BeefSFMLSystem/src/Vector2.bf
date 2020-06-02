@@ -18,12 +18,12 @@ namespace SFML.System
 		public static Vector2f Zero => Vector2f(0f, 0f);
 		public static Vector2f Right => Vector2f(1f, 0f);
 		public static Vector2f Up => Vector2f(0f, 1f);
-		public static explicit operator Vector2f(Vector2i v)  { return Vector2f(v.X, v.Y); }
+
+		public static implicit operator Vector2f(Vector2i v)  { return Vector2f(v.X, v.Y); }
 
 		public static Vector2f operator +(Vector2f lhs, float scalar) { return Vector2f(lhs.X + scalar, lhs.Y + scalar); }
 		public static Vector2f operator -(Vector2f lhs, float scalar) { return Vector2f(lhs.X - scalar, lhs.Y - scalar); }
 		public static Vector2f operator -(Vector2f rhs) { return Vector2f(-rhs.X, -rhs.Y); }
-
 		public static Vector2f operator *(Vector2f lhs, float scalar) { return Vector2f(lhs.X * scalar, lhs.Y * scalar); }
 	}
 
@@ -42,6 +42,13 @@ namespace SFML.System
 		public static Vector2i Zero => Vector2i(0, 0);
 		public static Vector2f Right => Vector2f(1f, 0f);
 		public static Vector2f Up => Vector2f(0f, 1f);
+
+		public static explicit operator Vector2i(Vector2f v)  { return Vector2i((int32)v.X, (int32)v.Y); }
+
+		public static Vector2i operator +(Vector2i lhs, float scalar) { return Vector2i((int32)(lhs.X + scalar), (int32)(lhs.Y + scalar)); }
+		public static Vector2i operator -(Vector2i lhs, float scalar) { return Vector2i((int32)(lhs.X - scalar), (int32)(lhs.Y - scalar)); }
+		public static Vector2i operator -(Vector2i rhs) { return Vector2i(-rhs.X, -rhs.Y); }
+		public static Vector2i operator *(Vector2i lhs, float scalar) { return Vector2i((int32)(lhs.X * scalar), (int32)(lhs.Y * scalar)); }
 	}
 
 	extension Vector2u32 {
