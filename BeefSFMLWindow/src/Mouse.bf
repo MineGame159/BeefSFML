@@ -22,8 +22,12 @@ namespace SFML.Window
 	public static class Mouse
 	{
 		public static bool CheckButtonPressed(MouseButton button) { return sfMouse_isButtonPressed(button); }
+
 		public static void SetPosition(Window relativeTo, Vector2i position) => sfMouse_setPosition(position, relativeTo.[Friend]_handle);
+
 		public static Vector2i GetPosition(Window relativeTo) => sfMouse_getPosition(relativeTo.[Friend]_handle);
+
+		// Native functions
 
 		[Import(CSFML_WINDOW), CLink]
 		private static extern bool sfMouse_isButtonPressed(MouseButton button);

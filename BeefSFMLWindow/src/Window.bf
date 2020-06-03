@@ -61,11 +61,14 @@ namespace SFML.Window
 
 		public ~this() { Destroy(); }
 
-		protected virtual bool PollEvent(out WindowEvent event) => sfWindow_pollEvent(_handle, out event); 
+		protected virtual bool PollEvent(out WindowEvent event) => sfWindow_pollEvent(_handle, out event);
+
 		public virtual bool IsOpen() => sfWindow_isOpen(_handle); 
 		public virtual void Close() => sfWindow_close(_handle); 
 		public virtual void Display() => sfWindow_display(_handle); 
 		public virtual void SetMouseCursor(Cursor cursor) => sfWindow_setMouseCursor(_handle, cursor.[Friend]_handle);
+		public virtual Vector2i GetPosition() => sfWindow_getPosition(_handle);
+		public virtual void SetPosition(Vector2i position) => sfWindow_setPosition(_handle, position);
 
 		public void SetKeyRepeat(bool enabled) => sfWindow_setKeyRepeatEnabled(_handle, enabled);
 
@@ -137,11 +140,7 @@ namespace SFML.Window
 			}
 		}
 
-		[Import(CSFML_WINDOW), CLink]
-		private static extern Vector2i sfMouse_getPosition(WindowHandle handle);
-
-		[Import(CSFML_WINDOW), CLink]
-		private static extern void sfMouse_setPosition(Vector2i position, WindowHandle handle);
+		// Native functions
 
 		[Import(CSFML_WINDOW), CLink]
 		private static extern WindowHandle sfWindow_create(VideoMode mode, char8* title, Styles style, ref ContextSettings settings);
@@ -232,8 +231,5 @@ namespace SFML.Window
 
 		[Import(CSFML_WINDOW), CLink]
 		private static extern bool sfWindow_hasFocus(WindowHandle handle);
-
-		[Import(CSFML_WINDOW), CLink]
-		private static extern Vector2i sfTouch_getPosition(uint32 finger, void* relativeTo);
 	}
 }

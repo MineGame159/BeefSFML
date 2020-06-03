@@ -113,7 +113,10 @@ namespace SFML.Window
 	public static class Keyboard
 	{
 		public static bool IsKeyPressed(Keycode key) => sfKeyboard_isKeyPressed(key);
+
 		public static void SetVirtualKeyboardVisible(bool visible) => sfKeyboard_setVirtualKeyboardVisible(visible);
+
+		// Native functions
 
 		[Import(CSFML_WINDOW), CLink]
 		private static extern bool sfKeyboard_isKeyPressed(Keycode Key);

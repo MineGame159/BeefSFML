@@ -42,6 +42,8 @@ namespace SFML.Window
 		public uint32 Height;
 		public uint32 BitsPerPixel;
 
+		// Native functions
+
 		[Import(CSFML_WINDOW), CLink]
 		private static extern VideoMode sfVideoMode_getDesktopMode();
 

@@ -26,11 +26,11 @@ namespace SFML.Window
 	{
 		public this(CursorType type) : base(sfCursor_createFromSystem(type)) {}
 		public this(uint8* pixels, Vector2u32 size, Vector2u32 hotspot) : base(sfCursor_createFromPixels(pixels, size, hotspot)) {}
-		~this() {
-			sfCursor_destroy(_handle);
-		}
+		public ~this() { sfCursor_destroy(_handle); }
 
 		public override void Dispose() { base.Dispose(); }
+
+		// Native functions
 
 		[Import(CSFML_WINDOW), CLink]
 		private static extern CursorHandle sfCursor_createFromSystem(CursorType type);
