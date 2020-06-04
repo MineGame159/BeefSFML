@@ -1,8 +1,20 @@
 FileVersion = 1
-Dependencies = {corlib = "*", BeefSFMLSystem = "*"}
+Dependencies = {corlib = "*", BeefSFMLSystem = "*", corlib = "*"}
 
 [Project]
 Name = "BeefSFMLAudio"
 TargetType = "BeefLib"
 StartupObject = "Program"
 DefaultNamespace = "SFML.Audio"
+
+[Configs.Debug.Win32]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-d-2.dll\")"]
+
+[Configs.Debug.Win64]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-d-2.dll\")"]
+
+[Configs.Release.Win32]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-2.dll\")"]
+
+[Configs.Release.Win64]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-2.dll\")"]
