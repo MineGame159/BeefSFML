@@ -3,6 +3,7 @@ namespace SFML.System
 	public struct WindowHandle : int {}
 	public struct CursorHandle : int {}
 	public struct ContextHandle	: int {}
+
 	public struct ViewHandle : int {}
 	public struct ShaderHandle : int {}
 	public struct TextureHandle	: int {}
@@ -14,6 +15,7 @@ namespace SFML.System
 	public struct FontHandle : int {}
 	public struct TextHandle : int {}
 	public struct ImageHandle : int {}
+
 	public struct SoundHandle : int {}
 	public struct SoundBufferHandle : int {}
 	public struct MusicHandle : int {}
