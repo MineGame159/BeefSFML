@@ -25,7 +25,6 @@ namespace SFML.Graphics
 
 		protected override Vector2f GetPoint(uint32 index)
 		{
-			Console.WriteLine("Calling from circle");
 		    float angle = (float)(index * 2 * Math.PI_f / _pointCount - Math.PI_f / 2);
 		    float x = (float)Math.Cos(angle) * _radius;
 		    float y = (float)Math.Sin(angle) * _radius;
