@@ -14,5 +14,7 @@ namespace SFML.System
 	public struct FontHandle : int {}
 	public struct TextHandle : int {}
 	public struct ImageHandle : int {}
-	public struct MusicPlayerHandle : int {}
+	public struct SoundHandle : int {}
+	public struct SoundBufferHandle : int {}
+	public struct MusicHandle : int {}
 }
