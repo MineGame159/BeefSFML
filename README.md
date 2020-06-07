@@ -1,6 +1,6 @@
 # BeefSFML
-SFML wrapper for the Beef programming language: https://www.beeflang.org  
-This wrapper depends on the CSFML bindings which can be found here: https://www.sfml-dev.org/download/csfml/
+SFML wrapper for the Beef programming language https://www.beeflang.org created by Meatnose and then finished by me.
+This wrapper depends on the CSFML bindings which can be found here: https://www.sfml-dev.org/download/csfml.
 
 **IMPORTANT:** Before 0.42.5 gets released you must use nightly build. There is a bug with multiple projects using CopyToDependents command.
 
