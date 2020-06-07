@@ -6,6 +6,7 @@ namespace SFML.Audio
 {
 	public class SoundBuffer : SFHandle<SoundBufferHandle>
 	{
+		public this(SoundBufferHandle handle) : base(handle) {}
 		public this(StringView filename) : base(sfSoundBuffer_createFromFile(filename.ToScopeCStr!())) {}
 		public this(uint8* data, uint64 size) : base(sfSoundBuffer_createFromMemory(data, size)) {}
 		public this(Stream stream) : base(sfSoundBuffer_createFromStream(scope SFStreamAdapter(stream).GetCompatibleStream())) {}

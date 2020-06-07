@@ -22,6 +22,7 @@ namespace SFML.System
 	public struct SoundHandle : int {}
 	public struct SoundBufferHandle : int {}
 	public struct MusicHandle : int {}
+	public struct SoundRecorderHandle : int {}
 
 	// Network
 	public struct PacketHandle : int {}

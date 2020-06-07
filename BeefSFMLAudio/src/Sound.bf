@@ -69,6 +69,7 @@ namespace SFML.Audio
 		public void Stop() => sfSound_stop(_handle);
 
 		public void SetBuffer(SoundBuffer buffer) => sfSound_setBuffer(_handle, buffer.[Friend]_handle);
+		public void SetBufferRaw(SoundBufferHandle buffer) => sfSound_setBuffer(_handle, buffer);
 		public SoundStatus GetStatus() => sfSound_getStatus(_handle);
 
 		// Native functions
