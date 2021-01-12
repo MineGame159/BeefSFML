@@ -11,6 +11,8 @@ This API is not documented but it is mostly similar to the SFML.NET binding whic
 3. If you placed them in the 'BeefLibs' folder, you can simply rightclick your workspace and click "Add from installed", else you have to click "Add existing project" -
    and manually navigate to each BeefProj.toml
 4. **Mark** the modules **as a dependency** of your startup project by rightclick -> properties -> dependencies
+6. Per default, each submodule is configured with a postbuild command to copy the CSFML DLL's (debug / release, depending on project type) from a submodule/dist folder. -
+   since CSFML binaries aren't distributed with these bindings, you will have to add these to the submodules manually, or alternatively just change the postbuild command to fit      your needs.
 5. Enjoy beautiful **SFML**.
 
 ```cs
