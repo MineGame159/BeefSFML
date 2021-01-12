@@ -4,7 +4,7 @@ using SFML.Window;
 
 namespace SFML.Graphics
 {
-	public enum PrimitiveType
+	public enum PrimitiveType : uint32
 	{
 		Points,
 		Lines,

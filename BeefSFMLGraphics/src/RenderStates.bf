@@ -11,6 +11,7 @@ namespace SFML.Graphics
 		public Matrix3x3 Matrix = Matrix3x3.Identity;
 		private TextureHandle TextureH;
 		private ShaderHandle ShaderH;
+
 		public this(BlendMode mode, Texture texture, Shader shader, Matrix3x3? matrix)
 		{
 			Mode = mode;

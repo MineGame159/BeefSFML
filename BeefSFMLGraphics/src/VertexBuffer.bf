@@ -3,7 +3,7 @@ using SFML.System;
 
 namespace SFML.Graphics
 {
-	public enum BufferUsageType
+	public enum BufferUsageType : uint32
 	{
 		Stream,
 		Dynamic,
