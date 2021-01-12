@@ -55,12 +55,25 @@ namespace SFML.Graphics
  		public void SetVSync(bool enabled) { sfRenderWindow_setVerticalSyncEnabled(_handle, enabled); }
 		public void SetFrameLimit(uint32 limit) { sfRenderWindow_setFramerateLimit(_handle, limit); }
 
+		[Obsolete("DrawVertexBuffer() is deprecated, use overloaded RenderWindow.Draw() instead", false)]
 		public void DrawVertexBuffer(VertexBuffer buffer, RenderStates states) { sfRenderWindow_drawVertexBuffer(_handle, buffer.[Friend]_handle, states); }
+		[Obsolete("DrawVertexArray() is deprecated, use overloaded RenderWindow.Draw() instead", false)]
 		public void DrawVertexArray(VertexArray array, RenderStates states) { sfRenderWindow_drawVertexArray(_handle, array.[Friend]_handle, states); }
+		[Obsolete("DrawPrimitive() is deprecated, use overloaded RenderWindow.Draw() instead", false)]
 		public void DrawPrimitive(PrimitiveType type, Vertex[] vertices, RenderStates states) { sfRenderWindow_drawPrimitives(_handle, vertices.CArray(), (uint32)vertices.Count, type, states); }
+		[Obsolete("DrawSprite() is deprecated, use overloaded RenderWindow.Draw() instead", false)]
 		public void DrawSprite(Sprite sprite, RenderStates states) { sfRenderWindow_drawSprite(_handle, sprite.[Friend]_handle, states); }
+		[Obsolete("DrawShape() is deprecated, use overloaded RenderWindow.Draw() instead", false)]
 		public void DrawShape(Shape shape, RenderStates states) { sfRenderWindow_drawShape(_handle, shape.[Friend]_handle, states); }
+		[Obsolete("DrawText() is deprecated, use overloaded RenderWindow.Draw() instead", false)]
 		public void DrawText(Text text, RenderStates states) { sfRenderWindow_drawText(_handle, text.[Friend]_handle, states); }
+
+		public void Draw(VertexBuffer buffer, RenderStates states) => sfRenderWindow_drawVertexBuffer(_handle, buffer.[Friend]_handle, states);
+		public void Draw(VertexArray array, RenderStates states) => sfRenderWindow_drawVertexArray(_handle, array.[Friend]_handle, states);
+		public void Draw(PrimitiveType type, Vertex[] vertices, RenderStates states) => sfRenderWindow_drawPrimitives(_handle, vertices.CArray(), (.)vertices.Count, type, states);
+		public void Draw(Sprite sprite, RenderStates states) => sfRenderWindow_drawSprite(_handle, sprite.[Friend]_handle, states);
+		public void Draw(Shape shape, RenderStates states) => sfRenderWindow_drawShape(_handle, shape.[Friend]_handle, states);
+		public void Draw(Text text, RenderStates states) => sfRenderWindow_drawText(_handle, text.[Friend]_handle, states);
 
 		public Vector2i GetRelativeMousePosition() => sfMouse_getPositionRenderWindow(_handle);
 		public void SetRelativeMousePosition(Vector2i position) => sfMouse_setPositionRenderWindow(position, _handle);
