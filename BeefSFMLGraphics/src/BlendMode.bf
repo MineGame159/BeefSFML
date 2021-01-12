@@ -2,7 +2,7 @@ using System;
 
 namespace SFML.Graphics
 {
-	public enum Factor : int32
+	public enum Factor : uint32
 	{
 	    Zero,
 	    One,
