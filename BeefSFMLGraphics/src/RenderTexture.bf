@@ -32,12 +32,27 @@ namespace SFML.Graphics
 		public void PushGLStates() => sfRenderTexture_pushGLStates(_handle); 
 		public void PopGLStates() => sfRenderTexture_popGLStates(_handle);
 
-		public void DrawVertexBuffer(VertexBuffer buffer, RenderStates states) => sfRenderTexture_drawVertexBuffer(_handle, buffer.[Friend]_handle, states);
-		public void DrawVertexArray(VertexArray array, RenderStates states) => sfRenderTexture_drawVertexArray(_handle, array.[Friend]_handle, states);
-		public void DrawPrimitive(PrimitiveType type, Vertex[] vertices, RenderStates states) =>  sfRenderTexture_drawPrimitives(_handle, vertices.CArray(), (uint32)vertices.Count, type, states);
-		public void DrawSprite(Sprite sprite, RenderStates states) => sfRenderTexture_drawSprite(_handle, sprite.[Friend]_handle, states);
-		public void DrawShape(Shape shape, RenderStates states) => sfRenderTexture_drawShape(_handle, shape.[Friend]_handle, states);
-		public void DrawText(Text text, RenderStates states) => sfRenderTexture_drawText(_handle, text.[Friend]_handle, states);
+		[Obsolete("DrawVertexBuffer() is deprecated, use overloaded RenderTexture.Draw() instead", false)]
+		public void DrawVertexBuffer(VertexBuffer buffer, RenderStates states) { sfRenderTexture_drawVertexBuffer(_handle, buffer.[Friend]_handle, states); }
+		[Obsolete("DrawVertexArray() is deprecated, use overloaded RenderTexture.Draw() instead", false)]
+		public void DrawVertexArray(VertexArray array, RenderStates states) { sfRenderTexture_drawVertexArray(_handle, array.[Friend]_handle, states); }
+		[Obsolete("DrawPrimitive() is deprecated, use overloaded RenderTexture.Draw() instead", false)]
+		public void DrawPrimitive(PrimitiveType type, Vertex[] vertices, RenderStates states) { sfRenderTexture_drawPrimitives(_handle, vertices.CArray(), (uint32)vertices.Count, type, states); }
+		[Obsolete("DrawSprite() is deprecated, use overloaded RenderTexture.Draw() instead", false)]
+		public void DrawSprite(Sprite sprite, RenderStates states) { sfRenderTexture_drawSprite(_handle, sprite.[Friend]_handle, states); }
+		[Obsolete("DrawShape() is deprecated, use overloaded RenderTexture.Draw() instead", false)]
+		public void DrawShape(Shape shape, RenderStates states) { sfRenderTexture_drawShape(_handle, shape.[Friend]_handle, states); }
+		[Obsolete("DrawText() is deprecated, use overloaded RenderTexture.Draw() instead", false)]
+		public void DrawText(Text text, RenderStates states) { sfRenderTexture_drawText(_handle, text.[Friend]_handle, states); }
+
+		public void Draw(VertexBuffer buffer, RenderStates states) => sfRenderTexture_drawVertexBuffer(_handle, buffer.[Friend]_handle, states);
+		public void Draw(VertexArray array, RenderStates states) => sfRenderTexture_drawVertexArray(_handle, array.[Friend]_handle, states);
+		public void Draw(PrimitiveType type, Vertex[] vertices, RenderStates states) => sfRenderTexture_drawPrimitives(_handle, vertices.CArray(), (.)vertices.Count, type, states);
+		public void Draw(Sprite sprite, RenderStates states) => sfRenderTexture_drawSprite(_handle, sprite.[Friend]_handle, states);
+		public void Draw(Shape shape, RenderStates states) => sfRenderTexture_drawShape(_handle, shape.[Friend]_handle, states);
+		public void Draw(Text text, RenderStates states) => sfRenderTexture_drawText(_handle, text.[Friend]_handle, states);
+		public void Draw(IDrawable drawable, RenderStates states) => drawable.Draw(this, states);
+		public void Draw(IDrawable drawable) => drawable.Draw(this, RenderStates(.Alpha, null, null, .Identity));
 
 		public void Clear(Color color) => sfRenderTexture_clear(_handle, color);
 

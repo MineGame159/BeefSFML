@@ -16,14 +16,14 @@ namespace SFML.Graphics
 		public Vector2u32 Size => sfTexture_getSize(_handle); 
 
 		public this(uint32 width, uint32 height) { sfTexture_create(width, height); }
-		public this(StringView filename) : base(0)
+		public this(String filename) : base(0)
 		{
 			let copy = scope String(filename);
 			FileUtility.ToRelativePath(copy);
 			_handle = sfTexture_createFromFile(copy, IntRect(0, 0, 0, 0));
 		}
 
-		public this(StringView filename, IntRect rect) : base(0)
+		public this(String filename, IntRect rect) : base(0)
 		{
 			let copy = scope String(filename);
 			FileUtility.ToRelativePath(copy);

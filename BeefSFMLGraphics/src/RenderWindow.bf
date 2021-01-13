@@ -74,6 +74,8 @@ namespace SFML.Graphics
 		public void Draw(Sprite sprite, RenderStates states) => sfRenderWindow_drawSprite(_handle, sprite.[Friend]_handle, states);
 		public void Draw(Shape shape, RenderStates states) => sfRenderWindow_drawShape(_handle, shape.[Friend]_handle, states);
 		public void Draw(Text text, RenderStates states) => sfRenderWindow_drawText(_handle, text.[Friend]_handle, states);
+		public void Draw(IDrawable drawable, RenderStates states) => drawable.Draw(this, states);
+		public void Draw(IDrawable drawable) => drawable.Draw(this, RenderStates(.Alpha, null, null, .Identity));
 
 		public Vector2i GetRelativeMousePosition() => sfMouse_getPositionRenderWindow(_handle);
 		public void SetRelativeMousePosition(Vector2i position) => sfMouse_setPositionRenderWindow(position, _handle);

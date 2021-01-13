@@ -6,8 +6,7 @@ namespace SFML.Window
 	public static class Clipboard
 	{
 		public static StringView GetString() => StringView(sfClipboard_getString());
-
-		public static void SetString(StringView text) => sfClipboard_setString(text.ToScopeCStr!());
+		public static void SetString(String text) => sfClipboard_setString(text.CStr());
 
 		// Native functions
 

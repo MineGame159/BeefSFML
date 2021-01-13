@@ -8,9 +8,8 @@ namespace SFML.Graphics
 	public class Shader : SFHandle<ShaderHandle>, IDisposable
 	{
 		public this(char8* vertexCode, char8* geometryCode, char8* fragmentCode) : base(sfShader_createFromMemory(vertexCode, geometryCode, fragmentCode)) {}
-		public this(StringView vertexPath, StringView geometryPath, StringView fragmentPath) : base(0)
+		public this(String vertexPath, String geometryPath, String fragmentPath) : base(0)
 		{
-
 			let vert = scope String(vertexPath);
 			let geom = scope String(geometryPath);
 			let frag = scope String(fragmentPath);

@@ -12,10 +12,8 @@ namespace SFML.Window
 		
 		public ContextSettings ContextSettings => sfContext_getSettings(_handle);
 
-
-		public static bool IsExtensionAvailable(StringView name) => sfContext_isExtensionAvailable(name.ToScopeCStr!());
-
-		public static void* GetFunction(StringView name) => sfContext_getFunction(name.ToScopeCStr!());
+		public static bool IsExtensionAvailable(String name) => sfContext_isExtensionAvailable(name.CStr());
+		public static void* GetFunction(String name) => sfContext_getFunction(name.CStr());
 
 		// Native functions
 

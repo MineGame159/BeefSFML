@@ -37,7 +37,7 @@ namespace SFML.System
 			let span = Span<uint8>((uint8*)data, size);
 
 			switch (stream.TryRead(span)) {
-				case .Ok(int val): return val;
+				case .Ok(let val): return val;
 				case .Err: Runtime.FatalError("Bad stream in SFStreamAdapter");
 			}
 		}
