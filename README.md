@@ -1,8 +1,11 @@
 # BeefSFML
-SFML wrapper for the Beef programming language https://www.beeflang.org created by Meatnose (EnokViking) and then finished by me.
+SFML wrapper for the Beef programming language https://www.beeflang.org created by Meatnose (EnokViking) and then finished by MineGame159.
 This wrapper depends on the CSFML bindings which can be found here: https://www.sfml-dev.org/download/csfml.
 
 This API is not documented but it is mostly similar to the SFML.NET binding which was used as a point of reference.
+
+# Requirements:
+Beeflang version 0.42.8+
 
 # Quick Start *(using Beef IDE)*
 1. Copy this repository or download the ZIP-archive.
