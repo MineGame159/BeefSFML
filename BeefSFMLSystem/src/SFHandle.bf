@@ -9,5 +9,5 @@ namespace SFML.System
 		public this(T handle) { _handle = handle; }
 
 		public virtual void Dispose() { delete this; }
-	}
+ 	}
 }

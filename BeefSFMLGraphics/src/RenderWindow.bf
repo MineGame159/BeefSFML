@@ -80,12 +80,12 @@ namespace SFML.Graphics
 		public Vector2i GetRelativeMousePosition() => sfMouse_getPositionRenderWindow(_handle);
 		public void SetRelativeMousePosition(Vector2i position) => sfMouse_setPositionRenderWindow(position, _handle);
 
-		public Vector2f FromScreenToWorld(Vector2i coords, View referenceView = null)
+		public Vector2f MapPixelToCoords(Vector2i coords, View referenceView = null)
 		{
 			 var viewHandle = referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle;
 			 return sfRenderWindow_mapPixelToCoords(_handle, coords, viewHandle);
 		} 
-		public Vector2i FromWorldToScreen(Vector2f coords, View referenceView = null)
+		public Vector2i MapCoordsToPixel(Vector2f coords, View referenceView = null)
 		{
 			let viewHandle = referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle;
 			return sfRenderWindow_mapCoordsToPixel(_handle, coords, viewHandle);

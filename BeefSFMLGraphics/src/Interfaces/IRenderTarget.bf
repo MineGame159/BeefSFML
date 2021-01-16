@@ -35,6 +35,9 @@ namespace SFML.Graphics
 		void PushGLStates(); 
 		void PopGLStates();
 
+		public Vector2f MapPixelToCoords(Vector2i coords, View referenceView = null);
+		public Vector2i MapCoordsToPixel(Vector2f coords, View referenceView = null);
+
 		void Clear(Color color);
 
 		IntRect CurrentViewport { get; } 

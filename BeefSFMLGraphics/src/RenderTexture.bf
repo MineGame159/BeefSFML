@@ -55,7 +55,6 @@ namespace SFML.Graphics
 		public void Draw(IDrawable drawable) => drawable.Draw(this, RenderStates(.Alpha, null, null, .Identity));
 
 		public void Clear(Color color) => sfRenderTexture_clear(_handle, color);
-
 		public bool GenerateMipap() => sfRenderTexture_generateMipmap(_handle);
 
 		public static uint32 MaximumAntialiasingLevel => sfRenderTexture_getMaximumAntialiasingLevel();
@@ -67,12 +66,13 @@ namespace SFML.Graphics
 			return _backingTexture;
 		}
 
-		public Vector2f FromScreenToWorld(Vector2i coords, View referenceView = null)
+		public Vector2f MapPixelToCoords(Vector2i coords, View referenceView = null)
 		{
 			let viewHandle = referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle;
 			return sfRenderTexture_mapPixelToCoords(_handle, coords, viewHandle);
-		} 
-		public Vector2i FromWorldToScreen(Vector2f coords, View referenceView = null)
+		}
+
+		public Vector2i MapCoordsToPixel(Vector2f coords, View referenceView = null)
 		{
 			let viewHandle = referenceView == null ? _view.[Friend]_handle : referenceView.[Friend]_handle;
 			return sfRenderTexture_mapCoordsToPixel(_handle, coords, viewHandle);
