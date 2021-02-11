@@ -11,7 +11,7 @@ DefaultNamespace = "SFML.Audio"
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-d-2.dll\")"]
 
 [Configs.Debug.Win64]
-PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-d-2.dll\")"]
+PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-2.dll\")"]
 
 [Configs.Release.Win32]
 PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/csfml-audio-2.dll\")"]
