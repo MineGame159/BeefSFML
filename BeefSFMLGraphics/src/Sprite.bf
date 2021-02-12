@@ -17,6 +17,11 @@ namespace SFML.Graphics
 			_texture = texture;
 			sfSprite_setTexture(_handle, texture.[Friend]_handle, true);
 		}
+		public this(Texture texture, IntRect rect) : this(texture)
+		{
+			sfSprite_setTextureRect(_handle, rect);
+		}
+
 		public ~this() { sfSprite_destroy(_handle); }
 
 		public Color Color
